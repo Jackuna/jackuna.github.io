@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+
+    <title>Random Password Generator</title>
+
+  </head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href="">
+          <i class="material-icons md-48">security</i> Secure Password
+      </a>
+
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+        </div>
+    </nav>
+
+<div class="container mt-5 bg-light border">
+<p class="mt-3 mb-4 text-center text-justify font-weight-bold" style="font-size: 14pt"><em>Security is an illusion, Privacy a myth but for sure Hackers are real.<br> Don't let them guess your obvious password.</em></p>
+  <div class="row justify-content-md-center">
+
+    <div class="col col-lg-2">
+    </div>
+
+    <div style=class="col-md-auto  mb-1 rounded bg-white form-group shadow-textarea">
+      
+		<textarea class="form-control z-depth-1 px-2 font-weight-bold text-dark text-center border-info" style="font-size: 22pt; letter-spacing: 1.4px; " id="myInput" rows="2" placeholder="">Loading ....</textarea>
+    </div>
+	
+    <div class="col col-lg-2">
+	
+    </div>
+  </div>
+
+    <div class="row justify-content-md-center mt-4">
+     <div class="col col-lg-2">
+      <!-- 1 of 3 --> 
+    </div>
+
+    <div class="col-md-auto mt-3">
+	  
+	  
+	  <label for="customRange2">Password Length : <span id="demo"></span></label>
+<input type="range" class="custom-range" min="0" max="16" value="9" id="customRange2">
+	  
+	  <br>
+	  <p3>Exclude <br>------------------------------------------------</p3>
+	  <br>
+	  
+	  
+	
+	  
+	<div class="custom-control custom-checkbox custom-control-inline">
+		
+		<input type="checkbox" class="custom-control-input" id="checkbox1" value='1'>
+		<label class="custom-control-label" for="checkbox1">Symbols</label>
+	</div>
+	
+	<div class="custom-control custom-checkbox custom-control-inline">
+		<input type="checkbox" class="custom-control-input" id="checkbox2" value='2'>
+		<label class="custom-control-label" for="checkbox2">Digits</label>
+		
+	</div>
+	</div>
+
+    <div class="col col-lg-2">
+      <!-- 3 of 3 -->
+    </div>
+
+  </div>
+
+
+
+<div class="container">
+  <div class="row justify-content-md-center">
+    <div class="col col-lg-2">
+     <!-- 1 of 3 -->
+    </div>
+    <div class="col-md-auto mt-4 mb-2">
+	
+	<button type="button" class="btn btn-primary mt-2" onclick="second()">
+	<i class="fas fa-key"></i>
+  Generate
+    </button>
+	
+     <button type="button" id="copybtn" class="btn btn-primary mt-2" onclick="copyFunction()">
+  Copy
+     <i class="far fa-copy"></i>
+    </button>
+
+        <button class="btn btn-primary mt-2" onclick="resetAll()">Reset
+		<i class="fas fa-redo-alt"></i>
+		</button>
+    </div>
+
+    <div class="col col-lg-2">
+    <!--  3 of 3 -->
+    </div>
+
+  </div>
+</div>
+</div>
+
+
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+	
+        
+      </div>
+    </div>
+  </div>
+
+<script>
+
+    function copyFunction() {
+  /* Get the text field */
+  var copyText = document.getElementById("myInput");
+
+  /* Select the text field */
+  copyText.select();
+  copyText.setSelectionRange(0, 99999); /*For mobile devices*/
+
+  /* Copy the text inside the text field */
+  document.execCommand("copy");
+
+  /* Alert the copied text */
+  alert("Copied password : " + copyText.value);
+  	
+}
+	var slider = document.getElementById("customRange2");
+	var output = document.getElementById("demo");
+	output.innerHTML = slider.value;
+
+	slider.oninput = function() {
+	output.innerHTML = this.value;
+	}
+	
+	function myFunction() {
+    var length ,text
+	var digitYN = document.getElementById("checkbox2");
+	var symbolYN = document.getElementById("checkbox1");
+	
+	if (digitYN.checked == true){
+    
+	var charset = "abcdefghijklmnopqrstuvwxyz!@#$%^&*ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	//console.log(charset);
+	
+  }	else if (symbolYN.checked == true) {
+    var charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+	//console.log(charset);
+	
+  } else if ((symbolYN.checked == true) && (digitYN.checked == true ) == true ){
+    var charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	//console.log(charset);
+  
+  } else {
+	var charset = "abcdefghijklmnopqrstuvwxyz!@#$%^&*ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    //console.log(charset);
+  }
+
+
+	//length = document.getElementById("numb").value;
+	    length = slider.value;
+
+        
+        retVal = "";
+		
+	
+    for (var i = 0, n = charset.length; i < length; ++i) {
+        retVal += charset.charAt(Math.floor(Math.random() * n));
+    text = retVal;
+    }
+    
+	// document.getElementById("myInput").innerHTML = text;
+	return text
+}
+	function second() {
+    document.getElementById("myInput").innerHTML = myFunction();
+	    
+}
+
+function resetAll() {
+    location.reload(true)
+
+}
+
+	
+</script>
+
+  </body>
+</html>
