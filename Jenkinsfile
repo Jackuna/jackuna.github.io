@@ -29,8 +29,6 @@ node('any'){
             }
 
         }
-    }
-}
   catch (e){
     echo "Error occurred - " + e.toString()
     throw e
