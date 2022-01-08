@@ -3,7 +3,7 @@ def VERSION = env.VERSION
 def JOBTYPE = env.JOBTYPE
 
 
-node('any'){
+node('Built-In'){
   try {
 
     stage('checkout'){
