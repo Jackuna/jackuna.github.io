@@ -23,7 +23,7 @@ node('any'){
                   }
     stage('deploy'){
        
-                    sh "docker run --rm ck-pwdGen-app/ansible:2.10-$BUILD_ID ansible-playbook -vvv --extra-vars "Environment=${ENVT} root.yml" 
+                    sh "docker run --rm ck-pwdGen-app/ansible:2.10-$BUILD_ID ansible-playbook -vvv --extra-vars 'Environment=${ENVT}' root.yml" 
          
                     } 
             }
