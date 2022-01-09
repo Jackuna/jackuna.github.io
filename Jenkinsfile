@@ -20,7 +20,7 @@ node('master'){
     stage('build'){
                   sh "whoami"
                    echo "Initiating Ansible image build via dockerfile process..."
-                   sh "docker build -t ck-pwdgen-app/2.10-$BUILD_ID ."
+                   sh "docker build -t ck-pwdgen-app/ansible:2.10-$BUILD_ID ."
                   }
     stage('deploy'){
        
