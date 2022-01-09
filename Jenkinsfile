@@ -25,15 +25,11 @@ node('master'){
                     sh "export AWS_ACCESS_KEY_ID=$ACCESS_KEY"
                     sh "export AWS_SECRET_ACCESS_KEY=$KEY_ID"
 
-                    sh "echo $AWS_ACCESS_KEY_ID"
-
                    echo "Initiating Ansible image build via dockerfile process..."
                    sh "docker build -t ck-pwdgen-app/ansible:2.10-$BUILD_ID ."
                   }
     stage('deploy'){
                     sh "ls -ltr"
-                    
-                    
                     sh "docker run --rm ck-pwdgen-app/ansible:2.10-$BUILD_ID ansible-playbook -vvv --extra-vars 'Environment=${ENVT}' root.yml" 
          
                     } 
