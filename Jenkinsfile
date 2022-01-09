@@ -20,11 +20,11 @@ node('master'){
     stage('build'){
                   sh "whoami"
                    echo "Initiating Ansible image build via dockerfile process..."
-                   sh "sudo docker build -t ck-pwdgen-app/ansible:2.10 ."
+                   sh "docker build -t ck-pwdgen-app/2.10-$BUILD_ID ."
                   }
     stage('deploy'){
        
-                    sh "sudo docker run --rm ck-pwdgen-app/ansible:2.10-$BUILD_ID ansible-playbook -vvv --extra-vars 'Environment=${ENVT}' root.yml" 
+                    sh "docker run --rm ck-pwdgen-app/ansible:2.10-$BUILD_ID ansible-playbook -vvv --extra-vars 'Environment=${ENVT}' root.yml" 
          
                     } 
             }
@@ -36,7 +36,7 @@ node('master'){
   finally {
     deleteDir()
         if ( "${JOBTYPE}" == 'build-deploy') {
-            sh 'docker rmi -f ck-pwdgen-app/ansible:2.10-$BUILD_ID  && echo "ck-pwdgen-app/ansible:2.10-$BUILD_ID local image deleted."'
+            sh 'docker rmi -f ck-pwdgen-app/2.10-$BUILD_ID  && echo "ck-pwdgen-app/2.10-$BUILD_ID local image deleted."'
        }
   }
 }
