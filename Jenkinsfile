@@ -1,6 +1,8 @@
 def ENVT = env.ENVIRONMENT
 def VERSION = env.VERSION
 def JOBTYPE = env.JOBTYPE
+def ACCESS_KEY = env.AWS_ACCESS_KEY
+def KEY_ID = env.AWS_SECRET_ACCESS_KEY
 
 
 node('master'){
@@ -18,13 +20,18 @@ node('master'){
         }
     		
     stage('build'){
-                  sh "whoami"
+                  sh "ls -ltr"
+                   sh "echo $ACCESS_KEY"
                    echo "Initiating Ansible image build via dockerfile process..."
                    sh "docker build -t ck-pwdgen-app/ansible:2.10-$BUILD_ID ."
                   }
     stage('deploy'){
-       
-                    sh "docker run --rm ck-pwdgen-app/ansible:2.10-$BUILD_ID ansible-playbook -vvv --extra-vars 'Environment=${ENVT}' root.yml" 
+                    sh "ls -ltr"
+                    sh "docker run \
+                        -e AWS_ACCESS_KEY_ID=$ACCESS_KEY \
+                        -e AWS_SECRET_ACCESS_KEY=$KEY_ID \
+                        -e AWS_DEFAULT_REGION='us-west-1' \
+                        ck-pwdgen-app/ansible:2.10-$BUILD_ID ansible-playbook -vvv --extra-vars 'Environment=${ENVT}' root.yml"
          
                     } 
             }
@@ -35,8 +42,9 @@ node('master'){
     } 
   finally {
     deleteDir()
-        if ( "${JOBTYPE}" == 'build-deploy') {
-            sh 'docker rmi -f ck-pwdgen-app/2.10-$BUILD_ID  && echo "ck-pwdgen-app/2.10-$BUILD_ID local image deleted."'
+        if ( "${JOBTYPE}" == 'build-deployi') {
+          
+            sh 'docker rmi -f ck-pwdgen-app/ansible:2.10-$BUILD_ID  && echo "ck-pwdgen-app/ansible:2.10-$BUILD_ID local image deleted."'
        }
   }
 }
