@@ -18,11 +18,12 @@ node('master'){
         }
     		
     stage('build'){
-                  sh "whoami"
+                  sh "ls -ltr"
                    echo "Initiating Ansible image build via dockerfile process..."
                    sh "docker build -t ck-pwdgen-app/ansible:2.10-$BUILD_ID ."
                   }
     stage('deploy'){
+                    sh "ls -ltr"
        
                     sh "docker run --rm ck-pwdgen-app/ansible:2.10-$BUILD_ID ansible-playbook -vvv --extra-vars 'Environment=${ENVT}' root.yml" 
          
