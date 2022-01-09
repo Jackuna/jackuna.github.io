@@ -21,10 +21,12 @@ node('master'){
     		
     stage('build'){
                   sh "ls -ltr"
-                  sh 'echo "${ACCESS_KEY}"'
-                    sh 'export AWS_ACCESS_KEY_ID="${ACCESS_KEY}"'
-                    sh 'export AWS_SECRET_ACCESS_KEY="${KEY_ID}"'
-                    sh 'echo $AWS_ACCESS_KEY_ID'
+        sh "docker rmi -f 130005402569.dkr.ecr.us-east-1.amazonaws.com/gcs-dev-bpod-sftp-ecs:$ENVT-$VERSION-$env.BUILD_ID
+                   sh "echo $ACCESS_KEY"
+                    sh "export AWS_ACCESS_KEY_ID=$ACCESS_KEY"
+                    sh "export AWS_SECRET_ACCESS_KEY=$KEY_ID"
+
+                    sh "echo $AWS_ACCESS_KEY_ID"
 
                    echo "Initiating Ansible image build via dockerfile process..."
                    sh "docker build -t ck-pwdgen-app/ansible:2.10-$BUILD_ID ."
