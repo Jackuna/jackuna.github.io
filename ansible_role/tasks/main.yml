@@ -1,0 +1,3 @@
+---
+- import_tasks: create_s3_bucket.yml
+#- import_tasks: create_bucket_directories.yml

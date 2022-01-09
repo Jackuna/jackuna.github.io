@@ -1,0 +1,34 @@
+---
+# default variables
+region: us-east-1
+ProductName: idm
+ProjectName: laas
+Environment: int
+PrimaryRegion: us-east-1
+SecondaryRegion: us-east-2
+regions:
+  us-east-1:
+    preferredMaintenanceWindow: "sat:06:00-sat:06:30"
+  us-east-2:
+    preferredMaintenanceWindow: "sat:05:00-sat:05:30"
+
+bucketCfg:
+  int:
+    Environment: "{{ Environment }}"
+    PrimarBucketName: "{{ ProductName }}-{{Environment}}-{{ ProjectName }}-primary-cyberkeeda-bucket-01"
+    SecondaryBucketName: "{{ ProductName }}-{{Environment}}-{{ ProjectName }}-secondary-cyberkeeda-bucket-01"
+    CDNLogBucketName: "{{ ProductName }}-{{Environment}}-{{ ProjectName }}-cdn-logs-cyberkeeda-bucket-01"
+    DevopsBucketName: "{{ ProductName }}-{{Environment}}-{{ ProjectName }}-devops-cyberkeeda-bucket-01"
+    PrimaryBucketRegion: "{{ PrimaryRegion }}"
+    SecondaryBucketRegion: "{{SecondaryRegion}}"
+    DevopsBucketRegion: "{{ PrimaryRegion }}"
+bucketTags:
+  int:
+    PrimaryBucketName: "{{ ProductName }}-{{Environment}}-{{ ProjectName }}-primary"
+    SecondaryBucketName: "{{ ProductName }}-{{Environment}}-{{ ProjectName }}-secondary"
+    Environment: "{{ Environment }}"
+    CreatorID: "kunal.saha@gmail.com"
+    APPId: "BA0AFC28-1B18-985C-1334-0E16DC4BCB49"
+    BU: "CORP"
+    Owner: "kunal.saha@gmail.com"
+    Dt: Dt

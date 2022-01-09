@@ -1,0 +1,42 @@
+---
+
+- name: Read environment specific variables.
+  include_vars:
+      file: "ansible_role/vars/{{ Environment }}/main.yml"
+
+- name: Create static-ck application buckets in us-east-1 region.
+  s3_bucket:
+      name: "{{ item }}"
+      state: present
+      tags:
+          Name: "{{ item }}"
+          Environment: "{{ Environment }}"
+          Owner: "{{ bucketTags[Environment]['Owner'] }}"
+      region: us-east-1
+      public_access:
+          block_public_acls: true
+          ignore_public_acls: true
+          block_public_policy: true
+          restrict_public_buckets: true
+  with_items:
+      - "{{ bucketCfg[Environment]['PrimarBucketName'] }}"
+      - "{{ bucketCfg[Environment]['DevopsBucketName'] }}"
+      - "{{ bucketCfg[Environment]['CDNLogBucketName'] }}"
+
+- name: Create static-ck application buckets in us-east-2 region.
+  s3_bucket:
+      name: "{{ item }}"
+      state: present
+      tags:
+          Name: "{{ item }}"
+          Environment: "{{ Environment }}"
+          Owner: "{{ bucketTags[Environment]['Owner'] }}"
+      region: us-east-2
+      public_access:
+          block_public_acls: true
+          ignore_public_acls: true
+          block_public_policy: true
+          restrict_public_buckets: true
+  with_items:
+      - "{{ bucketCfg[Environment]['SecondaryBucketName'] }}"
+
