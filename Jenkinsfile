@@ -20,11 +20,11 @@ node('master'){
     stage('build'){
                   sh "whoami"
                    echo "Initiating Ansible image build via dockerfile process..."
-                   sh "docker build -t ck-pwdgen-app/ansible:2.10 ."
+                   sh "sudo docker build -t ck-pwdgen-app/ansible:2.10 ."
                   }
     stage('deploy'){
        
-                    sh "docker run --rm ck-pwdgen-app/ansible:2.10-$BUILD_ID ansible-playbook -vvv --extra-vars 'Environment=${ENVT}' root.yml" 
+                    sh "sudo docker run --rm ck-pwdgen-app/ansible:2.10-$BUILD_ID ansible-playbook -vvv --extra-vars 'Environment=${ENVT}' root.yml" 
          
                     } 
             }
