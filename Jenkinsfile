@@ -1,6 +1,8 @@
 def ENVT = env.ENVIRONMENT
 def VERSION = env.VERSION
 def JOBTYPE = env.JOBTYPE
+def ACCESS_KEY = env.AWS_ACCESS_KEY
+def KEY_ID = env.AWS_SECRET_ACCESS_KEY
 
 
 node('master'){
@@ -24,7 +26,8 @@ node('master'){
                   }
     stage('deploy'){
                     sh "ls -ltr"
-       
+                    sh 'export AWS_ACCESS_KEY_ID="${ACCESS_KEY}"'
+                    sh 'export AWS_SECRET_ACCESS_KEY="${KEY_ID}"'
                     sh "docker run --rm ck-pwdgen-app/ansible:2.10-$BUILD_ID ansible-playbook -vvv --extra-vars 'Environment=${ENVT}' root.yml" 
          
                     } 
