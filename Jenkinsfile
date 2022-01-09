@@ -36,7 +36,7 @@ node('master'){
   finally {
     deleteDir()
         if ( "${JOBTYPE}" == 'build-deploy') {
-            sh 'docker rmi -f ck-pwdgen-app/2.10-$BUILD_ID  && echo "ck-pwdgen-app/2.10-$BUILD_ID local image deleted."'
+            sh 'docker rmi -f ck-pwdgen-app/ansible:2.10-$BUILD_ID  && echo "ck-pwdgen-app/ansible:2.10-$BUILD_ID local image deleted."'
        }
   }
 }
