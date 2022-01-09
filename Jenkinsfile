@@ -21,12 +21,11 @@ node('master'){
     		
     stage('build'){
                   sh "ls -ltr"
-                   sh "echo $ACCESS_KEY"
-                   echo "Initiating Ansible image build via dockerfile process..."
+                   echo "Building docker image via dockerfile..."
                    sh "docker build -t ck-pwdgen-app/ansible:2.10-$BUILD_ID ."
                   }
     stage('deploy'){
-                    sh "ls -ltr"
+                    echo "Infrastructure deployment started...."
                     sh "docker run \
                         -e AWS_ACCESS_KEY_ID=$ACCESS_KEY \
                         -e AWS_SECRET_ACCESS_KEY=$KEY_ID \
@@ -42,7 +41,7 @@ node('master'){
     } 
   finally {
     deleteDir()
-        if ( "${JOBTYPE}" == 'build-deployi') {
+        if ( "${JOBTYPE}" == 'build-deploy') {
           
             sh 'docker rmi -f ck-pwdgen-app/ansible:2.10-$BUILD_ID  && echo "ck-pwdgen-app/ansible:2.10-$BUILD_ID local image deleted."'
        }
