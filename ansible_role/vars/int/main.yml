@@ -10,10 +10,10 @@ SecondaryRegion: us-east-2
 bucketCfg:
   int:
     Environment: "{{ Environment }}"
-    PrimarBucketName: "{{ ProductName }}-{{Environment}}-{{ ProjectName }}-primary-bucket"
-    SecondaryBucketName: "{{ ProductName }}-{{Environment}}-{{ ProjectName }}-secondary-bucket"
-    CDNLogBucketName: "{{ ProductName }}-{{Environment}}-{{ ProjectName }}-cdn-logs-bucket"
-    DevopsBucketName: "{{ ProductName }}-{{Environment}}-{{ ProjectName }}-devops-bucket"
+    PrimarBucketName: "{{ ProductName }}-{{Environment}}-{{ ProjectName }}-primary-bucket-1"
+    SecondaryBucketName: "{{ ProductName }}-{{Environment}}-{{ ProjectName }}-secondary-bucket-2"
+    CDNLogBucketName: "{{ ProductName }}-{{Environment}}-{{ ProjectName }}-cdn-logs-bucket-1"
+    DevopsBucketName: "{{ ProductName }}-{{Environment}}-{{ ProjectName }}-devops-bucket-1"
     PrimaryBucketRegion: "{{ PrimaryRegion }}"
     SecondaryBucketRegion: "{{SecondaryRegion}}"
     DevopsBucketRegion: "{{ PrimaryRegion }}"
