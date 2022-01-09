@@ -26,8 +26,10 @@ node('master'){
                   }
     stage('deploy'){
                     sh "ls -ltr"
+                    sh 'echo "${ACCESS_KEY}"'
                     sh 'export AWS_ACCESS_KEY_ID="${ACCESS_KEY}"'
                     sh 'export AWS_SECRET_ACCESS_KEY="${KEY_ID}"'
+                    
                     sh "docker run --rm ck-pwdgen-app/ansible:2.10-$BUILD_ID ansible-playbook -vvv --extra-vars 'Environment=${ENVT}' root.yml" 
          
                     } 
