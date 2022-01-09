@@ -21,18 +21,20 @@ node('master'){
     		
     stage('build'){
                   sh "ls -ltr"
-                   sh "echo $ACCESS_KEY"
-                   echo "Initiating Ansible image build via dockerfile process..."
+                   echo "Building docker image via dockerfile..."
                    sh "docker build -t ck-pwdgen-app/ansible:2.10-$BUILD_ID ."
                   }
     stage('deploy'){
-                    sh "ls -ltr"
+                    echo "Infrastructure deployment started...."
+                    wrap([$class: "MaskPasswordsBuildWrapper",
+                          varPasswordPairs: [[password: ACCESS_KEY, var: ACCESS_KEY]],
+                                             [password: KEY_ID, var: KEY_ID]]]) {
                     sh "docker run \
                         -e AWS_ACCESS_KEY_ID=$ACCESS_KEY \
                         -e AWS_SECRET_ACCESS_KEY=$KEY_ID \
                         -e AWS_DEFAULT_REGION='us-west-1' \
                         ck-pwdgen-app/ansible:2.10-$BUILD_ID ansible-playbook -vvv --extra-vars 'Environment=${ENVT}' root.yml"
-         
+                      }
                     } 
             }
 
@@ -42,7 +44,7 @@ node('master'){
     } 
   finally {
     deleteDir()
-        if ( "${JOBTYPE}" == 'build-deployi') {
+        if ( "${JOBTYPE}" == 'build-deploy') {
           
             sh 'docker rmi -f ck-pwdgen-app/ansible:2.10-$BUILD_ID  && echo "ck-pwdgen-app/ansible:2.10-$BUILD_ID local image deleted."'
        }
