@@ -1,7 +1,5 @@
 ---
 
-
-
 - name: Read environment specific variables.
   include_vars:
       file: "ansible_role/vars/{{ Environment }}/main.yml"
@@ -26,11 +24,11 @@
       - { bucket_name: "{{ bucketCfg[Environment]['SecondaryBucketName'] }}", latest_dir: "/app1/latest" }
 
 
-# - name: Create empty directories to store build artifacts.
-#   aws_s3:
-#       bucket: "{{ item.bucket_name }}"
-#       object: "{{ item.artifact_dir }}"
-#       mode: create
-#   with_items:
-#       - { bucket_name: "{{ bucketCfg[Environment]['PrimarBucketName'] }}", artifact_dir: "/v1/artifcats" }
-#       - { bucket_name: "{{ bucketCfg[Environment]['SecondaryBucketName'] }}", artifact_dir: "/v1/artifcats" }
+- name: Create empty directories to store build artifacts.
+  aws_s3:
+      bucket: "{{ item.bucket_name }}"
+      object: "{{ item.artifact_dir }}"
+      mode: create
+  with_items:
+      - { bucket_name: "{{ bucketCfg[Environment]['PrimarBucketName'] }}", artifact_dir: "/v1/artifcats" }
+      - { bucket_name: "{{ bucketCfg[Environment]['SecondaryBucketName'] }}", artifact_dir: "/v1/artifcats" }

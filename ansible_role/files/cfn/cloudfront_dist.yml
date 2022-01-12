@@ -1,0 +1,270 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Description: 'CF Template to setup infra for static password generator application'
+
+Parameters:
+    Environment:
+      Description:    Please specify the target environment.
+      Type:           String
+      Default:        "int"
+      AllowedValues:
+        - int
+        - pre-prod
+        - prod
+    AppName:
+      Description:  Application name.
+      Type:         String
+      Default:      "pwdgen"
+
+    AlternateDomainNames:
+      Description:    CNAMEs (alternate domain names)
+      Type:           String
+      Default:        "jackuna.github.io"
+
+    IPV6Enabled:
+      Description:    Should CloudFront to respond to IPv6 DNS requests with an IPv6 address for your distribution.
+      Type:           String
+      Default:        true
+      AllowedValues:
+        - true
+        - false
+
+    OriginProtocolPolicy:
+      Description:    CloudFront Origin Protocol Policy to apply to your origin.
+      Type:           String
+      Default:        "https-only"
+      AllowedValues:
+        - http-only
+        - match-viewer
+        - https-only
+
+    Compress:
+      Description:    CloudFront Origin Protocol Policy to apply to your origin.
+      Type:           String
+      Default:        "true"
+      AllowedValues:
+        - true
+        - false
+
+    DefaultTTL:
+      Description:    The default time in seconds that objects stay in CloudFront caches before CloudFront forwards another request to your custom origin. By default, AWS CloudFormation specifies 86400 seconds (one day).
+      Type:           String
+      Default:        "540.0"
+
+    MaxTTL:
+      Description:    The maximum time in seconds that objects stay in CloudFront caches before CloudFront forwards another request to your custom origin. By default, AWS CloudFormation specifies 31536000 seconds (one year).
+      Type:           String
+      Default:        "600.0"
+
+    MinTTL:
+      Description:    The minimum amount of time that you want objects to stay in the cache before CloudFront queries your origin to see whether the object has been updated.
+      Type:           String
+      Default:        "1.0"
+
+    SmoothStreaming:
+      Description:    Indicates whether to use the origin that is associated with this cache behavior to distribute media files in the Microsoft Smooth Streaming format.
+      Type:           String
+      Default:        "false"
+      AllowedValues:
+        - true
+        - false
+    QueryString:
+      Description:    Indicates whether you want CloudFront to forward query strings to the origin that is associated with this cache behavior.
+      Type:           String
+      Default:        "false"
+      AllowedValues:
+        - true
+        - false
+
+    ForwardCookies:
+      Description:    Forwards specified cookies to the origin of the cache behavior.
+      Type:           String
+      Default:        "none"
+      AllowedValues:
+        - all
+        - whitelist
+        - none
+
+    ViewerProtocolPolicy:
+      Description:    The protocol that users can use to access the files in the origin that you specified in the TargetOriginId property when the default cache behavior is applied to a request.
+      Type:           String
+      Default:        "https-only"
+      AllowedValues:
+        - redirect-to-https
+        - allow-all
+        - https-only
+
+    PriceClass:
+      Description:    The price class that corresponds with the maximum price that you want to pay for CloudFront service. If you specify PriceClass_All, CloudFront responds to requests for your objects from all CloudFront edge locations.
+      Type:           String
+      Default:        "PriceClass_100"
+      AllowedValues:
+        - PriceClass_All
+        - PriceClass_100
+        - PriceClass_200
+
+    SslSupportMethod:
+      Description:    Specifies how CloudFront serves HTTPS requests.
+      Type:           String
+      Default:        "sni-only"
+      AllowedValues:
+        - sni-only
+        - vip
+
+    MinimumProtocolVersion:
+      Description:    The minimum version of the SSL protocol that you want CloudFront to use for HTTPS connections.
+      Type:           String
+      Default:        "TLSv1.2_2021"
+      AllowedValues:
+        - TLSv1.2_2021
+        - TLSv1.2_2019
+        - TLSv1.1_2018
+
+    OriginKeepaliveTimeout:
+      Description:    You can create a custom keep-alive timeout. All timeout units are in seconds. The default keep-alive timeout is 5 seconds, but you can configure custom timeout lengths. The minimum timeout length is 1 second; the maximum is 60 seconds.
+      Type:           String
+      Default:        "60"
+
+    OriginReadTimeout:
+      Description:    You can create a custom origin read timeout. All timeout units are in seconds. The default origin read timeout is 30 seconds, but you can configure custom timeout lengths. The minimum timeout length is 4 seconds; the maximum is 60 seconds.
+      Type:           String
+      Default:        "30"
+
+
+    BucketVersioning:
+      Description:    The versioning state of an Amazon S3 bucket. If you enable versioning, you must suspend versioning to disable it.
+      Type:           String
+      Default:        "Suspended"
+      AllowedValues:
+        - Enabled
+        - Suspended
+Mappings: 
+  EnvironmentMap: 
+    int: 
+      Name: DEV
+    pre-prod: 
+      Name: UAT
+    prod: 
+      Name: PROD
+
+Resources:
+  # Bucket Policy for primary and secondary buckets.
+  PrimaryBucketReadPolicy:
+      Type: 'AWS::S3::BucketPolicy'
+      Properties:
+        Bucket: !Sub 'ck-${Environment}-${AppName}-primary-bucket'
+        PolicyDocument:
+          Statement:
+          - Action: 
+              - 's3:GetObject'
+            Effect: Allow
+            Resource: !Sub 'arn:aws:s3:::ck-${Environment}-${AppName}-primary-bucket/*'
+            Principal:
+              CanonicalUser: !GetAtt PrimaryBucketCloudFrontOriginAccessIdentity.S3CanonicalUserId
+  SecondaryBucketReadPolicy:
+      Type: 'AWS::S3::BucketPolicy'
+      Properties:
+        Bucket: !Sub 'ck-${Environment}-${AppName}-secondary-bucket'
+        PolicyDocument:
+          Statement:
+          - Action: 
+              - 's3:GetObject'
+            Effect: Allow
+            Resource: !Sub 'arn:aws:s3:::ck-${Environment}-${AppName}-secondary/*'
+            Principal:
+              CanonicalUser: !GetAtt SecondaryBucketCloudFrontOriginAccessIdentity.S3CanonicalUserId
+
+  # Cloud Front OAI
+  PrimaryBucketCloudFrontOriginAccessIdentity:
+    Type: 'AWS::CloudFront::CloudFrontOriginAccessIdentity'
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: !Sub 'ck-${Environment}-${AppName}-primary'
+  SecondaryBucketCloudFrontOriginAccessIdentity:
+    Type: 'AWS::CloudFront::CloudFrontOriginAccessIdentity'
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: !Sub 'ck-${Environment}-${AppName}-secondary'
+
+  # Cloudfront Cache Policy
+  LASSCDNCachePolicy:
+    Type: AWS::CloudFront::CachePolicy
+    Properties: 
+      CachePolicyConfig: 
+        Comment: 'Max TTL 600 to validate frequent changes'
+        DefaultTTL: !Ref DefaultTTL
+        MaxTTL: !Ref MaxTTL
+        MinTTL: !Ref MinTTL
+        Name: !Sub 'ck-${Environment}-${AppName}-cache-policy'
+        ParametersInCacheKeyAndForwardedToOrigin: 
+            CookiesConfig: 
+                CookieBehavior: none
+            EnableAcceptEncodingBrotli: True
+            EnableAcceptEncodingGzip: True
+            HeadersConfig: 
+                HeaderBehavior: none
+            QueryStringsConfig: 
+                QueryStringBehavior: none
+
+  # CLOUDFRONT DISTRIBUTION
+  CloudFrontDistribution:
+    Type: 'AWS::CloudFront::Distribution'
+    DependsOn:
+    - LASSCDNCachePolicy
+    Properties:
+      DistributionConfig:
+        Comment: 'Cyberkeeda Password Generator application'
+        Enabled: true
+        HttpVersion: http2
+        IPV6Enabled: true
+        DefaultRootObject: version.json
+        Origins:
+        - DomainName: !Sub 'ck-${Environment}-${AppName}-primary.s3.amazonaws.com'
+          Id: !Sub 'ck-${Environment}-${AppName}-primary-origin'
+          OriginPath: "/v1/latest"
+          ConnectionAttempts: 1
+          ConnectionTimeout: 2
+          S3OriginConfig:
+            OriginAccessIdentity: !Sub 'origin-access-identity/cloudfront/${PrimaryBucketCloudFrontOriginAccessIdentity}'
+        - DomainName: !Sub 'ck-${Environment}-${AppName}-secondary.s3.amazonaws.com'
+          Id: !Sub 'ck-${Environment}-${AppName}-secondary-origin'
+          OriginPath: "/v1/latest"
+          ConnectionAttempts: 1
+          ConnectionTimeout: 2
+          S3OriginConfig:
+            OriginAccessIdentity: !Sub 'origin-access-identity/cloudfront/${SecondaryBucketCloudFrontOriginAccessIdentity}'
+        OriginGroups:
+          Quantity: 1
+          Items: 
+          - Id: !Sub 'ck-${Environment}-${AppName}-cdn-origin-group'
+            FailoverCriteria: 
+              StatusCodes: 
+                Items: 
+                - 500
+                - 502
+                - 503
+                - 504
+                - 403
+                - 404
+                Quantity: 6
+            Members:
+              Quantity: 2
+              Items: 
+              - OriginId: !Sub 'ck-${Environment}-${AppName}-primary-origin'
+              - OriginId: !Sub 'ck-${Environment}-${AppName}-secondary-origin'
+        CacheBehaviors:
+          - CachePolicyId: !GetAtt 'LASSCDNCachePolicy.Id'
+            PathPattern:  '*'
+            ViewerProtocolPolicy: !Ref 'ViewerProtocolPolicy'
+            TargetOriginId: !Sub 'ck-${Environment}-${AppName}-cdn-origin-group'
+        DefaultCacheBehavior:
+          AllowedMethods:
+            - GET
+            - HEAD
+          TargetOriginId: !Sub 'ck-${Environment}-${AppName}-cdn-origin-group'
+          ViewerProtocolPolicy: !Ref 'ViewerProtocolPolicy'
+          CachePolicyId: !GetAtt 'LASSCDNCachePolicy.Id'
+Outputs:
+  CDNCloudfrontURL:
+    Description: CloudFront CDN Url.
+    Value: !GetAtt  'CloudFrontDistribution.DomainName'

@@ -7,7 +7,7 @@
 - name: Create static-ck application buckets in us-east-1 region.
   s3_bucket:
       name: "{{ item }}"
-      state: present
+      state: absent
       tags:
           Name: "{{ item }}"
           Environment: "{{ Environment }}"
@@ -26,7 +26,7 @@
 - name: Create static-ck application buckets in us-east-2 region.
   s3_bucket:
       name: "{{ item }}"
-      state: present
+      state: absent
       tags:
           Name: "{{ item }}"
           Environment: "{{ Environment }}"

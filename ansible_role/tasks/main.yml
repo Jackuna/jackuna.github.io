@@ -1,3 +1,4 @@
 ---
 - import_tasks: create_s3_bucket.yml
 #- import_tasks: create_bucket_directories.yml
+- import_tasks: create_cloudfront_dist.yml

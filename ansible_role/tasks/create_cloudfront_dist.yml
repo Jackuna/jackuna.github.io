@@ -1,0 +1,39 @@
+ ---
+
+# Ansible tasks file to create aws cloudfront distribution for IDM LAAS
+# This file is called via tasks/main.yml file
+
+
+- name: Read environment specific variables.
+  include_vars:
+      file: "ansible_role/vars/{{ Environment }}/main.yml"
+    
+ 
+- name: "Create cloudfront distribution for IDM LAAS application with custom domain name"
+  cloudformation:
+    stack_name: "stack"
+    state: "present"
+    template: "ansible_role/files/cfn/cloudfront_dist.yaml"
+    create_changeset: False
+    region: "us-east-1"
+    template_parameters:
+      Environment: "{{ CloudfrontCfg[Environment]['Environment'] }}"
+      AppName: "{{ CloudfrontCfg[Environment]['AppName'] }}"
+      AlternateDomainNames: "{{ CloudfrontCfg[Environment]['AlternateDomainNames'] }}"
+      IPV6Enabled: "{{ CloudfrontCfg[Environment]['IPV6Enabled'] }}"
+      OriginProtocolPolicy: "{{ CloudfrontCfg[Environment]['OriginProtocolPolicy'] }}"
+      Compress: "{{ CloudfrontCfg[Environment]['Compress'] }}"
+      DefaultTTL: "{{ CloudfrontCfg[Environment]['DefaultTTL'] }}"
+      MaxTTL: "{{ CloudfrontCfg[Environment]['MaxTTL'] }}"
+      MinTTL: "{{ CloudfrontCfg[Environment]['MinTTL'] }}"
+      SmoothStreaming: "{{ CloudfrontCfg[Environment]['SmoothStreaming'] }}"
+      QueryString: "{{ CloudfrontCfg[Environment]['QueryString'] }}"
+      ForwardCookies: "{{ CloudfrontCfg[Environment]['ForwardCookies'] }}"
+      ViewerProtocolPolicy: "{{ CloudfrontCfg[Environment]['ViewerProtocolPolicy'] }}"
+      PriceClass: "{{ CloudfrontCfg[Environment]['PriceClass'] }}"
+      SslSupportMethod: "{{ CloudfrontCfg[Environment]['SslSupportMethod'] }}"
+      MinimumProtocolVersion: "{{ CloudfrontCfg[Environment]['MinimumProtocolVersion'] }}"
+      OriginKeepaliveTimeout: "{{ CloudfrontCfg[Environment]['OriginKeepaliveTimeout'] }}"
+      OriginReadTimeout: "{{ CloudfrontCfg[Environment]['OriginReadTimeout'] }}"
+      BucketVersioning: "{{ CloudfrontCfg[Environment]['BucketVersioning'] }}"
+
