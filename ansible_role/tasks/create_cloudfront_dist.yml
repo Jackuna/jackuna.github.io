@@ -5,11 +5,11 @@
       file: "ansible_role/vars/{{ Environment }}/main.yml"
     
  
-- name: "Create cloudfront distribution for IDM LAAS application with custom domain name"
+- name: "Create cloudfront distribution for password generator custom domain name"
   cloudformation:
     stack_name: "stack"
     state: "present"
-    template: "ansible_role/files/cfn/cloudfront_dist.yaml"
+    template: "ansible_role/files/cfn/cloudfront_dist.yml"
     create_changeset: False
     region: "us-east-1"
     template_parameters:
