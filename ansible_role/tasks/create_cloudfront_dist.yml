@@ -1,8 +1,4 @@
- ---
-
-# Ansible tasks file to create aws cloudfront distribution for IDM LAAS
-# This file is called via tasks/main.yml file
-
+---
 
 - name: Read environment specific variables.
   include_vars:
