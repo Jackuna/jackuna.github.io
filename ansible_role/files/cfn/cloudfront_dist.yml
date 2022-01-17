@@ -170,7 +170,7 @@ Resources:
           - Action: 
               - 's3:GetObject'
             Effect: Allow
-            Resource: !Sub 'arn:aws:s3:::ck-${Environment}-${AppName}-secondary/*'
+            Resource: !Sub 'arn:aws:s3:::ck-${Environment}-${AppName}-secondary-bucket/*'
             Principal:
               CanonicalUser: !GetAtt SecondaryBucketCloudFrontOriginAccessIdentity.S3CanonicalUserId
 
