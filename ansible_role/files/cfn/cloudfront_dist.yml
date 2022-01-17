@@ -138,14 +138,6 @@ Parameters:
       AllowedValues:
         - Enabled
         - Suspended
-Mappings: 
-  EnvironmentMap: 
-    int: 
-      Name: DEV
-    pre-prod: 
-      Name: UAT
-    prod: 
-      Name: PROD
 
 Resources:
   # Bucket Policy for primary and secondary buckets.
@@ -187,7 +179,7 @@ Resources:
         Comment: !Sub 'ck-${Environment}-${AppName}-secondary'
 
   # Cloudfront Cache Policy
-  LASSCDNCachePolicy:
+  CDNCachePolicy:
     Type: AWS::CloudFront::CachePolicy
     Properties: 
       CachePolicyConfig: 
@@ -210,7 +202,7 @@ Resources:
   CloudFrontDistribution:
     Type: 'AWS::CloudFront::Distribution'
     DependsOn:
-    - LASSCDNCachePolicy
+    - CDNCachePolicy
     Properties:
       DistributionConfig:
         Comment: 'Cyberkeeda Password Generator application'
