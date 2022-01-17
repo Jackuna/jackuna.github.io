@@ -245,7 +245,7 @@ Resources:
               - OriginId: !Sub 'ck-${Environment}-${AppName}-primary-origin'
               - OriginId: !Sub 'ck-${Environment}-${AppName}-secondary-origin'
         CacheBehaviors:
-          - CachePolicyId: !GetAtt 'LASSCDNCachePolicy.Id'
+          - CachePolicyId: !GetAtt 'CDNCachePolicy.Id'
             PathPattern:  '*'
             ViewerProtocolPolicy: !Ref 'ViewerProtocolPolicy'
             TargetOriginId: !Sub 'ck-${Environment}-${AppName}-cdn-origin-group'
@@ -255,7 +255,7 @@ Resources:
             - HEAD
           TargetOriginId: !Sub 'ck-${Environment}-${AppName}-cdn-origin-group'
           ViewerProtocolPolicy: !Ref 'ViewerProtocolPolicy'
-          CachePolicyId: !GetAtt 'LASSCDNCachePolicy.Id'
+          CachePolicyId: !GetAtt 'CDNCachePolicy.Id'
 Outputs:
   CDNCloudfrontURL:
     Description: CloudFront CDN Url.
